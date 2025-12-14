@@ -246,12 +246,23 @@ export default function ProfileBlock({ showProfile, setShowProfile }: ProfileBlo
         </div>
         <div className="profile-social-media">
           <ul>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/ayush-ramteke/" target="_blank" rel="noopener noreferrer">
+              <i className="fa-brands fa-linkedin"></i>
+            </a>
+            <a href="https://x.com/GladCode11011" target="_blank" rel="noopener noreferrer">
+              <i className="fa-brands fa-x-twitter"></i>
+            </a>
+            <a href="https://discord.com/users/gladcode" target="_blank" rel="noopener noreferrer">
+              <i className="fa-brands fa-discord"></i>
+            </a>
+            <a href="https://www.instagram.com/glad__code/" target="_blank" rel="noopener noreferrer">
+              <i className="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://www.youtube.com/@gladcode8451" target="_blank" rel="noopener noreferrer">
               <i className="fa-brands fa-youtube"></i>
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer"></a>
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <i className="fa-brands fa-instagram"></i>
+            <a href="mailto:ayush.ramteke1606@gmail.com" target="_blank" rel="noopener noreferrer">
+              <i className="fa-brands fa-google"></i>
             </a>
           </ul>
         </div>

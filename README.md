@@ -1,6 +1,6 @@
 # Portfolio Website - Next.js Version
 
-This is a modern Next.js version of the portfolio website, converted from the original HTML/CSS implementation.
+This the My portfolio website, showcasing what I am capable of, and how you'll not just get another developer but a geek who just love to solve problems and build products. 
 
 ## Features
 

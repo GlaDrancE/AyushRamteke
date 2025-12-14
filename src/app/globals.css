@@ -403,54 +403,6 @@ p {
   transition: all 0.4s;
 }
 
-.profile-social-media ul a:nth-of-type(3):hover {
-  background: -webkit-radial-gradient(
-    30% 107%,
-    circle,
-    #fdf497 0%,
-    #fdf497 5%,
-    #fd5949 45%,
-    #d6249f 60%,
-    #285aeb 90%
-  );
-  background: -o-radial-gradient(
-    30% 107%,
-    circle,
-    #fdf497 0%,
-    #fdf497 5%,
-    #fd5949 45%,
-    #d6249f 60%,
-    #285aeb 90%
-  );
-  background: radial-gradient(
-    circle at 30% 107%,
-    #fdf497 0%,
-    #fdf497 5%,
-    #fd5949 45%,
-    #d6249f 60%,
-    #285aeb 90%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.profile-social-media ul a:nth-of-type(1):hover {
-  color: #c4302b;
-}
-
-.profile-social-media ul a:nth-of-type(2) {
-  background: url(/images/social-media/fiverr.png) center center no-repeat;
-  width: 22px;
-  height: 22px;
-  background-size: contain;
-}
-
-.profile-social-media ul a:nth-of-type(2):hover {
-  background: url(/images/social-media/fiverrh.png) center center no-repeat;
-  background-size: contain;
-}
-
 .body-container {
   width: calc(100% - 100px);
   position: relative;

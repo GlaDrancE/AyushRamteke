@@ -46,6 +46,23 @@ export default function ProjectsPage() {
       website: 'https://entugo.com',
     },
     {
+      name: 'Tugo Eats Customer Portal',
+      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765685970/Gemini_Generated_Image_2xd74j2xd74j2xd7_rewde5.png',
+      description:
+        'Tugo Eats Customer Portal is a comprehensive platform built with modern technologies. As the lead developer, I created the entire application with 5 portals, managing the tech stack and maintaining teams. Built with TypeScript, Node.js, Docker, Express, Prisma, PostgreSQL, and many more cutting-edge technologies.',
+      github: null,
+      website: 'https://customer.entugo.com',
+    },
+    {
+      name: 'Entugo Client Portal',
+      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765689708/image_qev958.png',
+      description:
+        'Entugo Client Portal is a comprehensive platform built with modern technologies. As the lead developer, I created the entire application with 5 portals, managing the tech stack and maintaining teams. Built with TypeScript, Node.js, Docker, Express, Prisma, PostgreSQL, and many more cutting-edge technologies.',
+      github: null,
+      website: 'https://client.entugo.com',
+    },
+
+    {
       name: 'Newwton',
       image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765686072/Screenshot_2025-12-14_095052_zxolzm.png',
       description:
