@@ -4,14 +4,25 @@ import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import ProfileBlock from '@/components/ProfileBlock';
 import SideNavbar from '@/components/SideNavbar';
+import { projects } from '@/data/projects';
 
 export default function Home() {
+  const router = useRouter();
   const [showProfile, setShowProfile] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [bodyLeft, setBodyLeft] = useState('320px');
   const [bodyWidth, setBodyWidth] = useState('calc(100% - 320px - 100px)');
+  const [terminalInput, setTerminalInput] = useState('');
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [draftInput, setDraftInput] = useState('');
+  const [terminalHistory, setTerminalHistory] = useState<string[]>([
+    'Portfolio terminal initialized.',
+    'Type `help` to see available commands.',
+  ]);
 
   useEffect(() => {
     const updateBodyPosition = () => {
@@ -31,68 +42,8 @@ export default function Home() {
     return () => window.removeEventListener('resize', updateBodyPosition);
   }, [isNavOpen]);
 
-  const projects = [
-    {
-      name: 'MediLink',
-      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765614392/Gemini_Generated_Image_caoxw9caoxw9caox_jhxhmg.png',
-      github: 'https://github.com/GlaDrancE/Medilink',
-      website: 'https://mediglad.vercel.app/',
-    },
-    {
-      name: 'Entugo',
-      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765685970/Gemini_Generated_Image_2xd74j2xd74j2xd7_rewde5.png',
-      github: null,
-      website: "https://entugo.com",
-    },
-    {
-      name: 'Newwton',
-      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765686072/Screenshot_2025-12-14_095052_zxolzm.png',
-      github: null,
-      website: "https://newwton.com",
-    },
-    {
-      name: 'Ritzy',
-      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765686072/Screenshot_2025-12-14_094958_cmoqla.png',
-      github: null,
-      website: "https://ritzydemo.netlify.app/",
-    },
-    {
-      name: 'Helping Notes',
-      image: '/images/projects/helpingnotes.png',
-      github: "https://github.com/GlaDrancE/helpingNotes",
-      website: "https://helpingnotes.netlify.app/",
-    },
-    {
-      name: 'Pixls',
-      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765686393/Screenshot_2025-12-14_095512_bdebcn.png',
-      github: "https://github.com/GlaDrancE/Pixls",
-      website: "https://pixlss.netlify.app/",
-    },
-    {
-      name: 'Clickmates',
-      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765686882/Screenshot_2025-12-14_100123_bw1c6s.png',
-      github: "https://github.com/GlaDrancE/Pixls",
-      website: "https://github.com/GlaDrancE/photographer-template",
-    },
-    {
-      name: 'anime-website',
-      image: '/images/projects/anime-website.png',
-      github: null,
-      website: null,
-    },
-    {
-      name: 'Ecommerce Website',
-      image: '/images/projects/ecom.png',
-      github: null,
-      website: "https://fluffy-nasturtium-ef31e1.netlify.app/",
-    },
-    {
-      name: 'Playfull Words',
-      image: 'https://res.cloudinary.com/dduj1ln0v/image/upload/v1765686824/Screenshot_2025-12-14_100325_bkdahi.png',
-      github: null,
-      website: "https://tourmaline-fox-9558c9.netlify.app/",
-    },
-  ];
+  // Filter to show only first 10 projects on home page
+  const displayedProjects = projects.slice(0, 10);
 
   const testimonials = [
     {
@@ -127,6 +78,150 @@ export default function Home() {
     },
   ];
 
+  const runTerminalCommand = (rawCommand: string) => {
+    const command = rawCommand.trim().toLowerCase();
+    const projectDeepDives: Record<string, string[]> = {
+      medilink: [
+        'Problem: Medical records and prescriptions were fragmented across clinics.',
+        'Solution: Built a healthcare platform with digital prescriptions, records, and secure auth.',
+        'Impact: Faster doctor-patient workflows and real-time record access across devices.',
+      ],
+      entugo: [
+        'Problem: A multi-portal business needed one scalable platform with clear ownership boundaries.',
+        'Solution: Led architecture and delivery for 5 portals using TypeScript, Node.js, Docker, Prisma, PostgreSQL.',
+        'Impact: Unified operations and reduced delivery friction across product teams.',
+      ],
+      newwton: [
+        'Problem: Needed a premium web experience without sacrificing responsiveness.',
+        'Solution: Built a modern web app with MERN + Three.js + GSAP + optimized UI flows.',
+        'Impact: High-engagement UX with smooth interaction on production builds.',
+      ],
+    };
+    const commandList = [
+      'help',
+      'whoami',
+      'about',
+      'projects',
+      'project <name>',
+      'experience',
+      'skills',
+      'stack',
+      'github',
+      'linkedin',
+      'opensource',
+      'achievements',
+      'contact',
+      'hire',
+      'clear',
+      'resume',
+    ];
+
+    if (!command) {
+      setTerminalHistory((prev) => [...prev, '$']);
+      setHistoryIndex(-1);
+      return;
+    }
+
+    setCommandHistory((prev) => [...prev, rawCommand]);
+    setHistoryIndex(-1);
+    setDraftInput('');
+
+    const append = (line: string) => setTerminalHistory((prev) => [...prev, `$ ${rawCommand}`, line]);
+    const appendLines = (lines: string[]) =>
+      setTerminalHistory((prev) => [...prev, `$ ${rawCommand}`, ...lines]);
+
+    if (command.startsWith('project ')) {
+      const projectName = command.replace('project ', '').trim();
+      const deepDive = projectDeepDives[projectName];
+      if (!deepDive) {
+        append(`No deep dive found for "${projectName}". Try: project medilink | project entugo | project newwton`);
+        return;
+      }
+      appendLines(deepDive);
+      return;
+    }
+
+    switch (command) {
+      case 'help':
+        append(`Available: ${commandList.join(', ')}`);
+        break;
+      case 'whoami':
+        append('Ayush Ramteke - Full-stack engineer building production SaaS and scalable backend systems.');
+        break;
+      case 'about':
+        append(
+          'I design and ship production-grade systems end-to-end. Current focus: backend-heavy SaaS, auth/payment workflows, and reliable cloud deployments.'
+        );
+        break;
+      case 'projects':
+        appendLines([
+          'MediLink [SaaS, Healthcare, Full-stack]',
+          'Entugo [SaaS, Multi-portal, Architecture]',
+          'Tugo Eats Customer Portal [Product, Customer Experience]',
+          'Newwton [MERN, Three.js, Animation]',
+          'Use "project <name>" for a deep dive.',
+        ]);
+        break;
+      case 'experience':
+        append(
+          'Built and shipped multiple SaaS products, designed APIs/microservices, handled auth/payments, and led delivery across frontend + backend + infra.'
+        );
+        break;
+      case 'skills':
+        appendLines([
+          'Backend: Node.js, TypeScript, Express, Prisma, PostgreSQL',
+          'Infra/DevOps: Docker, CI/CD, AWS basics, monitoring',
+          'Frontend: React, Next.js, Tailwind, state management',
+          'Architecture: API design, auth, background jobs, scaling patterns',
+        ]);
+        break;
+      case 'stack':
+        append('Production stack: TypeScript + Node.js + Express + Prisma + PostgreSQL + Next.js + Docker.');
+        break;
+      case 'github':
+        append('GitHub: https://github.com/GlaDrancE');
+        break;
+      case 'linkedin':
+        append('LinkedIn: https://www.linkedin.com/in/ayush-ramteke');
+        break;
+      case 'opensource':
+        append('Open-source: Primarily product-focused work; selective public repos and reusable templates on GitHub.');
+        break;
+      case 'achievements':
+        append('Achievements: Built and maintained real-world multi-portal SaaS systems used by active businesses.');
+        break;
+      case 'contact':
+        appendLines([
+          'Email: ayushramtekeofficial@gmail.com',
+          'LinkedIn: https://www.linkedin.com/in/ayush-ramteke-408955251',
+          'Or run: open /contact',
+        ]);
+        break;
+      case 'hire':
+        append(
+          'Hire me if you need someone who can own architecture-to-production delivery, not just isolated tasks.'
+        );
+        break;
+      case 'resume':
+        append('Opening resume in a new tab...');
+        window.open('/Gldsy.pdf', '_blank', 'noopener,noreferrer');
+        break;
+      case 'open /contact':
+        append('Redirecting to contact page...');
+        router.push('/contact');
+        break;
+      case 'open /projects':
+        append('Redirecting to projects page...');
+        router.push('/projects');
+        break;
+      case 'clear':
+        setTerminalHistory([]);
+        break;
+      default:
+        append(`Command not found: ${rawCommand}. Type help.`);
+    }
+  };
+
   return (
     <>
       <ProfileBlock showProfile={showProfile} setShowProfile={setShowProfile} />
@@ -139,12 +234,74 @@ export default function Home() {
         }}
       >
         <div className="welcome-container">
-          <h1 className="text-uppercase">READY TO BOOK AN ORDER</h1>
-          <h3>
-            <span></span>
-            <span> Let&apos;s work together!</span>
-          </h3>
-          <Link href="/contact">Contact Me</Link>
+          <div className="terminal-window">
+            <div className="terminal-header">
+              <span className="terminal-dot terminal-dot-red"></span>
+              <span className="terminal-dot terminal-dot-yellow"></span>
+              <span className="terminal-dot terminal-dot-green"></span>
+              <p>portfolio@ayush:~</p>
+            </div>
+            <div className="terminal-body">
+              {terminalHistory.map((line, index) => (
+                <p key={`${line}-${index}`} className={line.startsWith('$') ? 'terminal-line-command' : 'terminal-line-output'}>
+                  {line}
+                </p>
+              ))}
+              <form
+                className="terminal-input-line"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  runTerminalCommand(terminalInput);
+                  setTerminalInput('');
+                }}
+              >
+                <span className="terminal-prompt">$</span>
+                <input
+                  value={terminalInput}
+                  onChange={(e) => setTerminalInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'ArrowUp') {
+                      e.preventDefault();
+                      if (commandHistory.length === 0) return;
+
+                      if (historyIndex === -1) {
+                        setDraftInput(terminalInput);
+                        const latestIndex = commandHistory.length - 1;
+                        setHistoryIndex(latestIndex);
+                        setTerminalInput(commandHistory[latestIndex]);
+                        return;
+                      }
+
+                      if (historyIndex > 0) {
+                        const nextIndex = historyIndex - 1;
+                        setHistoryIndex(nextIndex);
+                        setTerminalInput(commandHistory[nextIndex]);
+                      }
+                    }
+
+                    if (e.key === 'ArrowDown') {
+                      e.preventDefault();
+                      if (commandHistory.length === 0 || historyIndex === -1) return;
+
+                      if (historyIndex < commandHistory.length - 1) {
+                        const nextIndex = historyIndex + 1;
+                        setHistoryIndex(nextIndex);
+                        setTerminalInput(commandHistory[nextIndex]);
+                        return;
+                      }
+
+                      setHistoryIndex(-1);
+                      setTerminalInput(draftInput);
+                    }
+                  }}
+                  className="terminal-input"
+                  autoComplete="off"
+                  spellCheck={false}
+                  placeholder="type a command..."
+                />
+              </form>
+            </div>
+          </div>
         </div>
         <div className="whoamI-section section-heading">
           <h4 className="text-uppercase">Who Am I?</h4>
@@ -230,42 +387,49 @@ export default function Home() {
         <div className="projects-section section-heading">
           <h4>Projects:</h4>
           <div className="projects-blocks">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="projects-card"
-                style={{
-                  background: `url('${project.image}') center center no-repeat`,
-                  backgroundSize: 'cover',
-                }}
+            {displayedProjects.map((project) => (
+              <Link
+                key={project.id}
+                href={`/projects/${project.slug}`}
+                className="projects-card-link"
+                style={{ textDecoration: 'none', display: 'block' }}
               >
-                {(project.github || project.website) && (
-                  <div className="project-links-overlay">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link-overlay"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <i className="fa-brands fa-github"></i>
-                      </a>
-                    )}
-                    {project.website && (
-                      <a
-                        href={project.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link-overlay"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <i className="fa-solid fa-globe"></i>
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
+                <div
+                  className="projects-card"
+                  style={{
+                    background: `url('${project.image}') center center no-repeat`,
+                    backgroundSize: 'cover',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {(project.github || project.website) && (
+                    <div className="project-links-overlay">
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link-overlay"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <i className="fa-brands fa-github"></i>
+                        </a>
+                      )}
+                      {project.website && (
+                        <a
+                          href={project.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link-overlay"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <i className="fa-solid fa-globe"></i>
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </Link>
             ))}
           </div>
         </div>

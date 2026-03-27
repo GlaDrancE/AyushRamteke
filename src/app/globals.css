@@ -438,6 +438,116 @@ p {
   z-index: 9;
 }
 
+.terminal-window {
+  width: min(920px, 92%);
+  height: 420px;
+  border: 1px solid #3a3a3a;
+  border-radius: 10px;
+  background: rgba(14, 14, 14, 0.92);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  border-bottom: 1px solid #2e2e2e;
+  padding: 0 14px;
+  background: #1a1a1a;
+}
+
+.terminal-header p {
+  margin-left: 8px;
+  color: #a0a0a0;
+  font-size: 13px;
+}
+
+.terminal-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.terminal-dot-red {
+  background: #ff5f57;
+}
+
+.terminal-dot-yellow {
+  background: #febc2e;
+}
+
+.terminal-dot-green {
+  background: #28c840;
+}
+
+.terminal-body {
+  height: calc(100% - 42px);
+  overflow-y: auto;
+  padding: 16px;
+  font-family: Consolas, "Courier New", monospace;
+  color: #e5e5e5;
+}
+
+.terminal-line-command,
+.terminal-line-output {
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-line-command {
+  color: #ffc700;
+}
+
+.terminal-line-output {
+  color: #cfcfcf;
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-prompt {
+  color: #ffc700;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 15px;
+}
+
+.terminal-input::placeholder {
+  color: #777;
+}
+
+.terminal-cursor {
+  width: 8px;
+  height: 18px;
+  background: #ffc700;
+  animation: terminal-blink 1s step-end infinite;
+}
+
+.terminal-input-line:focus-within .terminal-cursor {
+  width: 12px;
+}
+
+@keyframes terminal-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 .welcome-container h1 {
   font-family: var(--headings-font);
 }
@@ -721,18 +831,25 @@ p {
   justify-content: center;
 }
 
-.projects-card {
+.projects-card-link {
   width: 300px;
   height: 200px;
-  background: var(--white);
   margin: 20px;
+  text-decoration: none;
+  display: block;
+}
+
+.projects-card {
+  width: 100%;
+  height: 100%;
+  background: var(--white);
   transition: all 0.4s;
   cursor: pointer;
   position: relative;
   overflow: hidden;
 }
 
-.projects-card:hover {
+.projects-card-link:hover .projects-card {
   transform: scale(0.9);
 }
 
@@ -1055,6 +1172,13 @@ textarea {
   margin-top: 50px;
 }
 
+.project-card-link {
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  display: block;
+}
+
 .project-card {
   width: 100%;
   height: 400px;
@@ -1147,7 +1271,7 @@ textarea {
 
 .project-description {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: space-between;
   padding: 10px;
   color: var(--white);
@@ -1160,7 +1284,7 @@ textarea {
   width: 70%;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   background: var(--contact-color);
   padding: 20px;
@@ -1868,4 +1992,36 @@ textarea {
     font-size: 24px;
     margin-bottom: 16px;
   }
+}
+
+/* Markdown Content Styles */
+.markdown-content {
+  width: 100%;
+  color: var(--fade-white);
+  font-family: var(--primary-font);
+}
+
+.markdown-content > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.markdown-content strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.markdown-content em {
+  font-style: italic;
+  color: var(--fade-white);
 }

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface ProfileBlockProps {
   showProfile: boolean;
@@ -111,7 +110,7 @@ export default function ProfileBlock({ showProfile, setShowProfile }: ProfileBlo
             <Image src="/images/profile.jpg" alt="Profile" width={120} height={120} />
           </div>
           <div className="profile-name">Ayush Ramteke</div>
-          <div className="profile-bio">Full stack web developer and Programmer</div>
+          <div className="profile-bio">Backend-heavy SaaS & MVP systems for startups</div>
           <Image
             src="/images/cross.png"
             onClick={() => setShowProfile(false)}
@@ -204,7 +203,12 @@ export default function ProfileBlock({ showProfile, setShowProfile }: ProfileBlo
               </div>
             </div>
           </div>
-          <hr />
+          <div style={{ marginTop: '20px' }}>
+            <hr />
+            <a href="/Gldsy.pdf" target="_blank" rel="noopener noreferrer" className="d-block text-center text-secondary tr">
+              <p>Download CV</p>
+            </a>
+          </div>
           {/* <div className="profile-languages">
             <div className="lang">
               <div className="pie animate" style={{ '--p': 80, '--c': '#FFC700' } as React.CSSProperties}>
@@ -240,9 +244,7 @@ export default function ProfileBlock({ showProfile, setShowProfile }: ProfileBlo
               ))}
             </div>
           </div>
-          <Link href="#" className="d-block text-center text-secondary tr">
-            <p>Download CV</p>
-          </Link>
+
         </div>
         <div className="profile-social-media">
           <ul>
